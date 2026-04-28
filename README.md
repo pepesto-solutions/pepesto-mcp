@@ -13,7 +13,7 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "pepesto": {
       "command": "npx",
-      "args": ["-y", "@pepesto-solutions/pepesto-mcp"],
+      "args": ["-y", "@pepesto/pepesto-mcp"],
       "env": { "PEPESTO_API_KEY": "pep_sk_…" }
     }
   }
@@ -23,7 +23,7 @@ Add to `claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto-solutions/pepesto-mcp
+claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto/pepesto-mcp
 ```
 
 ## API cost guidance

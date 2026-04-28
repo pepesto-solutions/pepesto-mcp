@@ -170,7 +170,7 @@ describe("MCP server (in-memory)", () => {
     expect(text).toContain("unauthorized");
   });
 
-  test("returns isError:true when /link is called without API key configured", async () => {
+  test("returns isError:true when an authed tool is called without API key configured", async () => {
     const noKey = await makeHarness({ apiKey: undefined });
     noKey.setNextResponse({ status: 200, body: '{"x":1}' });
     const res = await noKey.client.callTool({

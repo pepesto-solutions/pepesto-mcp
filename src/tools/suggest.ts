@@ -15,23 +15,14 @@ export function registerSuggestTool(server: McpServer, client: PepestoClient): v
         "display in your app or website without attribution; the license is good for 24 hours " +
         "after the call.",
       inputSchema: {
-        query: z.string().min(1).describe("Free-text query, e.g. 'vegan pasta dinner for two'."),
-        ingredients_include: z
-          .array(z.string())
-          .optional()
-          .describe("Ingredients that must be present."),
-        ingredients_exclude: z
-          .array(z.string())
-          .optional()
-          .describe("Ingredients to avoid."),
-        cuisine: z.string().optional().describe("Cuisine, e.g. 'italian', 'thai'."),
-        dietary_tags: z
-          .array(z.string())
-          .optional()
-          .describe("Dietary tags, e.g. ['vegan','gluten-free']."),
-        max_minutes: z.number().int().positive().optional().describe("Max prep+cook minutes."),
-        num_servings: z.number().int().positive().optional().describe("Target number of servings."),
-        locale: z.string().optional().describe("BCP 47 locale, e.g. 'en-GB'."),
+        query: z
+          .string()
+          .min(1)
+          .describe(
+            "Free-text query that may include cuisine, dietary tags, ingredients to include " +
+              "or avoid, time constraints, and servings, e.g. 'vegan keto dinner low on carb " +
+              "for two'.",
+          ),
       },
     },
     async (args) => runTool(() => client.post("/suggest", args)),

@@ -14,7 +14,7 @@ Add to `claude_desktop_config.json`:
     "pepesto": {
       "command": "npx",
       "args": ["-y", "@pepesto-solutions/pepesto-mcp"],
-      "env": { "PEPESTO_API_KEY": "pk_live_…" }
+      "env": { "PEPESTO_API_KEY": "pep_sk_…" }
     }
   }
 }
@@ -23,7 +23,7 @@ Add to `claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add pepesto -e PEPESTO_API_KEY=pk_live_… -- npx -y @pepesto-solutions/pepesto-mcp
+claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto-solutions/pepesto-mcp
 ```
 
 ## API cost guidance
@@ -50,7 +50,7 @@ To keep the bill predictable:
 3. Set the key in your environment:
 
    ```bash
-   export PEPESTO_API_KEY=pk_live_…
+   export PEPESTO_API_KEY=pep_sk_…
    ```
 
 ## Tools
@@ -66,8 +66,6 @@ To keep the bill predictable:
 | `pepesto_credits` | `POST /credits` | Check remaining credits. Free. |
 
 `/checkout` is **not** wrapped — it's a turn-by-turn browser-automation loop and is out of scope for this server. `/link` isn't exposed either: an agent doesn't need it once the key is in `PEPESTO_API_KEY` (see [Getting an API key](#getting-an-api-key) above).
-
-For per-call pricing see <https://www.pepesto.com/pricing/>.
 
 ## Example agent prompts
 
@@ -129,7 +127,7 @@ npm run test:coverage
 Run the inspector against the local build:
 
 ```bash
-PEPESTO_API_KEY=pk_… npm run inspector
+PEPESTO_API_KEY=pep_sk_… npm run inspector
 ```
 
 ## License

@@ -1,0 +1,12 @@
+{
+  "name": "suggest_missing_query",
+  "request": {
+    "method": "POST",
+    "endpoint": "/suggest",
+    "body_raw": "{}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{}\n"
+  }
+}

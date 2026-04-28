@@ -1,0 +1,12 @@
+{
+  "name": "products_invalid_kg_token",
+  "request": {
+    "method": "POST",
+    "endpoint": "/products",
+    "body_raw": "{\"recipe_kg_tokens\":[\"kg_7315a20c\"],\"supermarket_domain\":\"tesco.com\"}"
+  },
+  "response": {
+    "status": 400,
+    "body": "/app/srv/api/impl/products_handler.go:69: illegal base64 data at input byte 10\n"
+  }
+}

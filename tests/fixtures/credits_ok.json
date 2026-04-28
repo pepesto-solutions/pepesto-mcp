@@ -1,0 +1,12 @@
+{
+  "name": "credits_ok",
+  "request": {
+    "method": "POST",
+    "endpoint": "/credits",
+    "body_raw": "{}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"euro_cents\":68815}\n"
+  }
+}

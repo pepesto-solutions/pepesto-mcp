@@ -1,0 +1,12 @@
+{
+  "name": "catalog_unknown_market",
+  "request": {
+    "method": "POST",
+    "endpoint": "/catalog",
+    "body_raw": "{\"supermarket_domain\":\"not-a-real-supermarket.invalid\"}"
+  },
+  "response": {
+    "status": 200,
+    "body": "/app/srv/api/impl/http_handler_main.go:134: /app/srv/api/impl/catalog_handler.go:52: Unsupported supermarket\n"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "catalog_missing_required",
+  "request": {
+    "method": "POST",
+    "endpoint": "/catalog",
+    "body_raw": "{}"
+  },
+  "response": {
+    "status": 200,
+    "body": "/app/srv/api/impl/http_handler_main.go:134: /app/srv/api/impl/catalog_handler.go:52: Unsupported supermarket\n"
+  }
+}

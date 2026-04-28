@@ -1,0 +1,12 @@
+{
+  "name": "session_invalid_token",
+  "request": {
+    "method": "POST",
+    "endpoint": "/session",
+    "body_raw": "{\"supermarket_domain\":\"tesco.com\",\"skus\":[{\"session_token\":\"bogus\",\"num_units_to_buy\":1}]}"
+  },
+  "response": {
+    "status": 400,
+    "body": "/app/srv/api/impl/session_handler.go:77: /app/srv/api/impl/session_handler.go:54: illegal base64 data at input byte 4\n"
+  }
+}

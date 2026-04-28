@@ -1,0 +1,12 @@
+{
+  "name": "oneshot_missing_inputs",
+  "request": {
+    "method": "POST",
+    "endpoint": "/oneshot",
+    "body_raw": "{\"supermarket_domain\":\"tesco.com\"}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"redirect_url\":\"https://example.com/88f3fac9\"}\n"
+  }
+}

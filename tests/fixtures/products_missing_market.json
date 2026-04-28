@@ -1,0 +1,12 @@
+{
+  "name": "products_missing_market",
+  "request": {
+    "method": "POST",
+    "endpoint": "/products",
+    "body_raw": "{\"recipe_kg_tokens\":[\"bogus\"]}"
+  },
+  "response": {
+    "status": 400,
+    "body": "/app/srv/api/impl/products_handler.go:48: /app/srv/api/impl/products_handler.go:104: Unsupported domain\n"
+  }
+}

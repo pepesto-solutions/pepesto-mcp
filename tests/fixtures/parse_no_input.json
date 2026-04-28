@@ -1,0 +1,12 @@
+{
+  "name": "parse_no_input",
+  "request": {
+    "method": "POST",
+    "endpoint": "/parse",
+    "body_raw": "{}"
+  },
+  "response": {
+    "status": 200,
+    "body": "/app/srv/api/impl/http_handler_main.go:134: /app/srv/api/impl/parse_handler.go:88: /app/srv/api/impl/parse_handler.go:61: Could not extract any recipe\n"
+  }
+}

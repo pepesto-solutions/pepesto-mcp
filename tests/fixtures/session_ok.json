@@ -1,0 +1,12 @@
+{
+  "name": "session_ok",
+  "request": {
+    "method": "POST",
+    "endpoint": "/session",
+    "body_raw": "{\"supermarket_domain\":\"tesco.com\",\"skus\":[{\"session_token\":\"sk_55473ce0\",\"num_units_to_buy\":1}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"session_id\":\"sid_a5a540f8\",\"payment_redirect_url\":\"\"}\n"
+  }
+}

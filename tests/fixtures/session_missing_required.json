@@ -1,0 +1,12 @@
+{
+  "name": "session_missing_required",
+  "request": {
+    "method": "POST",
+    "endpoint": "/session",
+    "body_raw": "{}"
+  },
+  "response": {
+    "status": 400,
+    "body": "/app/srv/api/impl/session_handler.go:71: No products / shopping list provided as input\n"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "oneshot_ok",
+  "request": {
+    "method": "POST",
+    "endpoint": "/oneshot",
+    "body_raw": "{\"content_urls\":[\"https://example.com/38806f8b\"],\"supermarket_domain\":\"tesco.com\",\"content_text\":\"also add sparkling water and olive oil\"}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"redirect_url\":\"https://example.com/431fea4c\"}\n"
+  }
+}

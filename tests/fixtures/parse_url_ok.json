@@ -1,0 +1,12 @@
+{
+  "name": "parse_url_ok",
+  "request": {
+    "method": "POST",
+    "endpoint": "/parse",
+    "body_raw": "{\"recipe_url\":\"https://example.com/38806f8b\",\"locale\":\"en-GB\"}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"recipe\":{\"title\":\"Pizza Margherita in 4 easy steps\",\"ingredients\":[\"300g flour\",\"1tsp yeast\",\"salt\",\"olive oil\",\"200ml water\",\"tomato sauce\",\"basil\",\"1 garlic clove\",\"130g mozzarella cheese\",\"parmesan cheese\",\"100g cherry tomatoes\"],\"steps\":[\"To make the base, mix flour, yeast, and salt. Add 200ml warm water and olive oil to form a soft dough. Knead for 5 minutes until smooth and set aside.\",\"For the sauce, mix the passata, basil, and crushed garlic, then season to taste.\",\"Divide the dough into two balls. On a floured surface, roll each ball into a large, thin round (about 25cm across) and place on floured baking sheets.\",\"Preheat the oven to 240°C. Smooth the sauce over the bases, then scatter with cheese and tomatoes. Drizzle with olive oil and season.\",\"Bake each pizza on a preheated baking sheet for 8-10 minutes until crisp. Serve with fresh basil leaves if desired.\"],\"image_url\":\"https://example.com/bd6dc1ac\",\"nutrition\":{\"calories\":1773,\"carbohydrates_grams\":244,\"protein_grams\":70,\"fat_grams\":52},\"portions\":{\"from\":0,\"to\":0},\"kg_token\":\"kg_877d492c\"}}\n"
+  }
+}

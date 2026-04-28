@@ -1,10 +1,6 @@
 # Pepesto MCP Server
 
-<!-- mcp-name: io.github.pepesto-solutions/pepesto-mcp -->
-
 MCP server for the [Pepesto API](https://www.pepesto.com/ai-grocery-shopping-agent/) — turn recipes into real supermarket carts across 26 European supermarkets.
-
-> Replace `@pepesto-solutions` (npm scope) and `pepesto-solutions` (GitHub user) with your own values before publishing.
 
 ## Quick install
 

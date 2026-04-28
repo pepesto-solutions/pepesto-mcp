@@ -1,0 +1,56 @@
+{
+  "name": "@pepesto-solutions/pepesto-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Pepesto grocery shopping API — recipe-to-cart across European supermarkets.",
+  "type": "module",
+  "mcpName": "io.github.pepesto-solutions/pepesto-mcp",
+  "bin": {
+    "pepesto-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('dist/index.js','755')\"",
+    "prepare": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "inspector": "npx @modelcontextprotocol/inspector dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "pepesto",
+    "grocery",
+    "recipe",
+    "shopping"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pepesto-solutions/pepesto-mcp.git"
+  },
+  "homepage": "https://www.pepesto.com/ai-grocery-shopping-agent/",
+  "bugs": {
+    "url": "https://github.com/pepesto-solutions/pepesto-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

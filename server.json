@@ -1,0 +1,26 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.pepesto-solutions/pepesto-mcp",
+  "description": "MCP server for the Pepesto grocery shopping API — recipe-to-cart across European supermarkets.",
+  "repository": {
+    "url": "https://github.com/pepesto-solutions/pepesto-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@pepesto-solutions/pepesto-mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "PEPESTO_API_KEY",
+          "description": "Pepesto API key. See the project README section \"Getting an API key\" for how to obtain one.",
+          "isRequired": true,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}

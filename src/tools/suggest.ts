@@ -12,8 +12,10 @@ export function registerSuggestTool(server: McpServer, client: PepestoClient): v
         "Search Pepesto's recipe graph (1M+ recipes) by free-text query and optional filters " +
         "(cuisine, dietary tags, ingredients to include/avoid, time, servings). Each result " +
         "includes a KgToken you can pass to pepesto_products. Returned images are licensed for " +
-        "display in your app or website without attribution; the license is good for 24 hours " +
-        "after the call.",
+        "display in your app or website without attribution. Show recipe title, " +
+        "image if available (json property `image_url`, don't search for external images), " +
+        "ingredients, steps, nutrition summary, allergens clearly marked, and portions/servings if available. " + 
+        "Don't show kg_token, but mark and save it for the next steps (e.g., /products call).",
       inputSchema: {
         query: z
           .string()

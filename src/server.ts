@@ -4,7 +4,6 @@ import { registerOneshotTool } from "./tools/oneshot.js";
 import { registerParseTool } from "./tools/parse.js";
 import { registerSuggestTool } from "./tools/suggest.js";
 import { registerProductsTool } from "./tools/products.js";
-import { registerSessionTool } from "./tools/session.js";
 import { registerCatalogTool } from "./tools/catalog.js";
 import { registerCreditsTool } from "./tools/credits.js";
 
@@ -25,7 +24,6 @@ export function createServer(opts: CreateServerOptions = {}): McpServer {
   registerParseTool(server, client);
   registerSuggestTool(server, client);
   registerProductsTool(server, client);
-  registerSessionTool(server, client);
   registerCatalogTool(server, client);
   registerCreditsTool(server, client);
 

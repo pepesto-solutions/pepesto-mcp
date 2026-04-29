@@ -43,7 +43,6 @@ const ALL_TOOLS = [
   "pepesto_parse",
   "pepesto_suggest",
   "pepesto_products",
-  "pepesto_session",
   "pepesto_catalog",
   "pepesto_credits",
 ] as const;
@@ -54,7 +53,7 @@ describe("MCP server (in-memory)", () => {
     h = await makeHarness();
   });
 
-  test("tools/list exposes all 7 Pepesto tools", async () => {
+  test("tools/list exposes all 6 Pepesto tools", async () => {
     const res = await h.client.listTools();
     const names = res.tools.map((t) => t.name).sort();
     expect(names).toEqual([...ALL_TOOLS].sort());
@@ -127,19 +126,6 @@ describe("MCP server (in-memory)", () => {
     expect(h.fetchCalls[0].url.endsWith("/products")).toBe(true);
   });
 
-  test("pepesto_session POSTs to /session", async () => {
-    h.setNextResponse({ body: '{"session_id":"s1"}' });
-    const res = await h.client.callTool({
-      name: "pepesto_session",
-      arguments: {
-        supermarket_domain: "coop.ch",
-        skus: [{ session_token: "tok1", num_units_to_buy: 2 }],
-      },
-    });
-    expect(res.isError).toBeFalsy();
-    expect(h.fetchCalls[0].url.endsWith("/session")).toBe(true);
-  });
-
   test("pepesto_catalog POSTs to /catalog", async () => {
     h.setNextResponse({ body: '{"products":[]}' });
     const res = await h.client.callTool({
@@ -184,12 +170,12 @@ describe("MCP server (in-memory)", () => {
 
   test("rejects bad input via Zod (missing required field)", async () => {
     const res = await h.client.callTool({
-      name: "pepesto_session",
-      arguments: { supermarket_domain: "coop.ch" /* skus missing */ },
+      name: "pepesto_products",
+      arguments: { supermarket_domain: "coop.ch" /* recipe_kg_tokens missing */ },
     });
     expect(res.isError).toBe(true);
     const text = (res.content as { type: string; text: string }[])[0].text;
-    expect(text).toMatch(/skus/);
+    expect(text).toMatch(/recipe_kg_tokens/);
     expect(h.fetchCalls).toHaveLength(0);
   });
 });

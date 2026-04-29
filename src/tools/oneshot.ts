@@ -13,8 +13,9 @@ export function registerOneshotTool(server: McpServer, client: PepestoClient): v
         "One-shot: turn recipe URLs, free-form text, and/or an image into a ready-to-checkout " +
         "cart for a chosen European supermarket. Returns a redirect_url that opens the Pepesto " +
         "checkout UI for the user to verify and pay. Internally runs parse + products + session " +
-        "with Pepesto's heuristics. Use this when you want the simplest end-to-end flow; use " +
-        "pepesto_parse + pepesto_products + pepesto_session for finer control.",
+        "(not exposed to agents) with Pepesto's heuristics. Use this when you want the simplest " +
+        "end-to-end flow; use pepesto_parse + pepesto_products + session (not exposed to agents) " +
+        "for finer control.",
       inputSchema: {
         content_urls: z
           .array(z.string().url())

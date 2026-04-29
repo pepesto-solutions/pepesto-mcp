@@ -11,7 +11,10 @@ export function registerParseTool(server: McpServer, client: PepestoClient): voi
       description:
         "Parse a recipe from a URL, free-form text, or image into a structured object: title, " +
         "ingredients, nutrition, instructions, and a KgToken you can pass to pepesto_products to " +
-        "build a real cart.",
+        "build a real cart. Once the response is returned, show recipe title, " +
+        "image if available (json property `image_url`, don't search for external images), " +
+        "ingredients, steps, nutrition summary, allergens clearly marked, and portions/servings if available. " + 
+        "Don't show kg_token, but mark and save it for the next steps (e.g., /products call).",
       inputSchema: {
         recipe_url: z
           .string()

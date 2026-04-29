@@ -50,11 +50,16 @@
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@vitest/coverage-v8": "^2.1.0",
+    "semantic-release": "^25.0.3",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   },
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   },
   "mcpName": "io.github.pepesto-solutions/pepesto-mcp"
 }

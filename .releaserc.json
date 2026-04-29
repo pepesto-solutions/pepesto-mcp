@@ -7,7 +7,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "VERSION=${nextRelease.version} jq --arg v \"$VERSION\" '.version=$v' server.json > server.tmp && mv server.tmp server.json"
+        "prepareCmd": "VERSION=${nextRelease.version} jq --arg v \"$VERSION\" '.version = $v | .packages |= map(if .registryType == \"npm\" then .version = $v else . end)' server.json > server.tmp && mv server.tmp server.json && cat server.json"
       }
     ],
 

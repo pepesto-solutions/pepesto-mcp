@@ -3,7 +3,31 @@
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
+
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "VERSION=${nextRelease.version} jq --arg v \"$VERSION\" '.version=$v' server.json > server.tmp && mv server.tmp server.json"
+      }
+    ],
+
     "@semantic-release/npm",
-    "@semantic-release/github"
+
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["package.json", "package-lock.json", "server.json"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ],
+
+    "@semantic-release/github",
+
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "curl -L https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz | tar xz mcp-publisher && ./mcp-publisher login github-oidc && ./mcp-publisher publish"
+      }
+    ]
   ]
 }

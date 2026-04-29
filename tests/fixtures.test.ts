@@ -154,7 +154,7 @@ describe("/oneshot — no content inputs is permissive: 200 with an empty-cart r
  * Response: 200 OK with `{ currency, items: [{ products: [{ session_token, ... }] }], missing_items }`.
  * Action:   PepestoClient parses the JSON body.
  * Reaction: Caller gets `items[]` with at least one matched product per ingredient,
- *           each product carrying a `session_token` ready to feed into /session.
+ *           each product carrying a `session_token` (opaque ID for downstream checkout).
  */
 describe("/products — happy path: kg_token + market → SKUs with session_tokens", () => {
   const fx = load("products_ok");
@@ -204,99 +204,6 @@ describe("/products — missing supermarket_domain raises 400", () => {
  */
 describe("/products — kg_token that's not valid base64 raises 400", () => {
   const fx = load("products_invalid_kg_token");
-
-  test("the 400 propagates as PepestoApiError", async () => {
-    let caught: unknown;
-    try {
-      await callFixture(fx);
-    } catch (err) {
-      caught = err;
-    }
-    expect(caught).toBeInstanceOf(PepestoApiError);
-    const e = caught as PepestoApiError;
-    expect(e.status).toBe(fx.response.status);
-    expect(e.endpoint).toBe(fx.request.endpoint);
-    expect(e.body).toBe(fx.response.body);
-  });
-});
-
-// ─── /session ─────────────────────────────────────────────────────────────
-
-/**
- * Request:  POST /session with `{ supermarket_domain, skus: [{ session_token, num_units_to_buy }] }`.
- * Response: 200 OK with `{ session_id, payment_redirect_url }`.
- * Action:   PepestoClient parses the JSON body.
- * Reaction: Caller gets a session_id that can be passed on to /checkout.
- */
-describe("/session — happy path: SKU list → session_id", () => {
-  const fx = load("session_ok");
-
-  test("the parsed body has `session_id` and `payment_redirect_url` strings", async () => {
-    const obj = (await callFixture(fx)) as {
-      session_id?: unknown;
-      payment_redirect_url?: unknown;
-    };
-    expect(typeof obj.session_id).toBe("string");
-    expect(typeof obj.payment_redirect_url).toBe("string");
-  });
-});
-
-/**
- * Request:  POST /session with `{}` — no fields.
- * Response: 400 with a Go stack-trace text body.
- * Action:   PepestoClient throws PepestoApiError.
- * Reaction: Caller catches the error.
- */
-describe("/session — empty body raises 400", () => {
-  const fx = load("session_missing_required");
-
-  test("the 400 propagates as PepestoApiError", async () => {
-    let caught: unknown;
-    try {
-      await callFixture(fx);
-    } catch (err) {
-      caught = err;
-    }
-    expect(caught).toBeInstanceOf(PepestoApiError);
-    const e = caught as PepestoApiError;
-    expect(e.status).toBe(fx.response.status);
-    expect(e.endpoint).toBe(fx.request.endpoint);
-    expect(e.body).toBe(fx.response.body);
-  });
-});
-
-/**
- * Request:  POST /session with `{ supermarket_domain, skus: [] }` — no SKUs.
- * Response: 400 with a Go stack-trace text body.
- * Action:   PepestoClient throws PepestoApiError.
- * Reaction: Caller catches the error.
- */
-describe("/session — empty SKU list raises 400", () => {
-  const fx = load("session_empty_skus");
-
-  test("the 400 propagates as PepestoApiError", async () => {
-    let caught: unknown;
-    try {
-      await callFixture(fx);
-    } catch (err) {
-      caught = err;
-    }
-    expect(caught).toBeInstanceOf(PepestoApiError);
-    const e = caught as PepestoApiError;
-    expect(e.status).toBe(fx.response.status);
-    expect(e.endpoint).toBe(fx.request.endpoint);
-    expect(e.body).toBe(fx.response.body);
-  });
-});
-
-/**
- * Request:  POST /session with a bogus session_token.
- * Response: 400 with a Go stack-trace text body.
- * Action:   PepestoClient throws PepestoApiError.
- * Reaction: Caller catches the error.
- */
-describe("/session — bogus session_token raises 400", () => {
-  const fx = load("session_invalid_token");
 
   test("the 400 propagates as PepestoApiError", async () => {
     let caught: unknown;

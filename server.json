@@ -6,12 +6,12 @@
     "url": "https://github.com/pepesto-solutions/pepesto-mcp",
     "source": "github"
   },
-  "version": "",
+  "version": "1.3.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@pepesto/pepesto-mcp",
-      "version": "",
+      "version": "1.3.2",
       "transport": {
         "type": "stdio"
       },

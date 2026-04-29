@@ -9,7 +9,7 @@
       {
         "prepareCmd": "VERSION=\"${nextRelease.version}\"; jq --arg v \"$VERSION\" '.version = $v | .packages |= map(if .registryType == \"npm\" then .version = $v else . end)' server.json > server.tmp && mv server.tmp server.json && cat server.json"
       }
-    ]
+    ],
 
     "@semantic-release/npm",
 

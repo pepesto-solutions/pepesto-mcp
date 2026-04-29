@@ -1,5 +1,7 @@
 # Pepesto MCP Server
 
+<!-- mcp-name: io.github.pepesto-solutions/pepesto-mcp -->
+
 MCP server for the [Pepesto API](https://www.pepesto.com/ai-grocery-shopping-agent/) — match recipes to real supermarket products across 26 European supermarkets. The MCP focuses on the **recipe → matched cart** half of the workflow (parse / search / map ingredients to SKUs / check catalogs); for actually placing the order, hand the user off to the [Pepesto app](https://www.pepesto.com/) where they can review and check out.
 
 ## Quick install

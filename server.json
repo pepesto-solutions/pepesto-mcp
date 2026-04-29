@@ -6,19 +6,22 @@
     "url": "https://github.com/pepesto-solutions/pepesto-mcp",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "1.2.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@pepesto/pepesto-mcp",
-      "version": "0.1.0",
-      "transport": { "type": "stdio" },
+      "version": "1.2.0",
+      "transport": { 
+        "type": "stdio" 
+        },
       "environmentVariables": [
         {
           "name": "PEPESTO_API_KEY",
           "description": "Pepesto API key. See the project README section \"Getting an API key\" for how to obtain one.",
           "isRequired": true,
-          "isSecret": true
+          "isSecret": true,
+          "format": "string"
         }
       ]
     }

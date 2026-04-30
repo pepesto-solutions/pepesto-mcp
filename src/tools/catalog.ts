@@ -16,7 +16,9 @@ export function registerCatalogTool(server: McpServer, client: PepestoClient): v
         "catalog dump, market analysis, or storefront build; for normal recipe-to-cart flows " +
         "use pepesto_oneshot or pepesto_products instead. Cache this query aggressively, no more than " + 
         "one call per day per supermarket is recommended. When presenting supermarket results " + 
-        "the user, use the product key as (external) link to the supermarket product itself.",
+        "the user, use the product key as (external) link to the supermarket product itself. " + 
+        "Show image if available (json property `image_url`, don't search for external images, " +
+        "skip rendering the Pepesto image if the image has webp extesion)",
       inputSchema: {
         supermarket_domain: SupermarketDomain,
         webhook_url: z

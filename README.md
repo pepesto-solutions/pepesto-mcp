@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.pepesto-solutions/pepesto-mcp -->
 
-MCP server for the [Pepesto API](https://www.pepesto.com/ai-grocery-shopping-agent/) — match recipes to real supermarket products across 26 European supermarkets. The MCP focuses on the **recipe → matched cart** half of the workflow (parse / search / map ingredients to SKUs / check catalogs); for actually placing the order, hand the user off to the [Pepesto app](https://www.pepesto.com/) where they can review and check out.
+MCP server for the [Pepesto API](https://www.pepesto.com/ai-grocery-shopping-agent/) — give your agent the ability to turn any recipe (a URL, plain text, or a photo) into a matched basket of real supermarket products with live prices, across 26 European supermarkets. The MCP covers the **recipe → matched cart** half of the workflow (parse / search / map ingredients to SKUs / check catalogs); when it's time to actually place the order, hand the user off to the [Pepesto app](https://www.pepesto.com/) where they can review and check out.
 
 ## Quick install
 
@@ -27,15 +27,6 @@ Add to `claude_desktop_config.json`:
 ```bash
 claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto/pepesto-mcp
 ```
-
-## API cost guidance
-
-Every Pepesto call drives live supermarket data and LLM processing — [there is no free tier](https://www.pepesto.com/pricing/#faq-free-tier). Credits don't expire, and students or early-stage teams can [reach out](https://www.pepesto.com/contact) for a discount. Per-call pricing and volume discounts: <https://www.pepesto.com/pricing/>.
-
-To keep the bill predictable:
-
-- `pepesto_catalog` is the most expensive call. Use it only when the user has explicitly asked for a catalog dump or market analysis, and **cache the result** for at least a day per supermarket. Most users who reach for `/catalog` early on don't actually need it — [tell us about your use case](https://www.pepesto.com/contact) and we'll usually suggest a cheaper path.
-- `pepesto_credits` is free; call it from your agent for a balance read-out.
 
 ## Getting an API key
 
@@ -145,7 +136,7 @@ Run the same recipe through `pepesto_products` for each market and compare total
 
 ### Catalog dump for market analysis
 
-Last resort, only on explicit request. Cache aggressively — see [Cost guidance](#api-cost-guidance) above.
+Only on explicit request, and cache aggressively — see [Pricing & best practices](#pricing--best-practices) below.
 
 > **User:** I'm building a price-comparison dashboard. Pull the full Plus NL catalog.
 >
@@ -196,6 +187,16 @@ This MCP stops at "matched cart with prices." It does **not** automate placing t
 
 - **Pepesto app (recommended).** Open the `redirect_url` returned by `pepesto_oneshot` in a browser, or hand the user the matched-product list from `pepesto_products` and tell them to recreate it in the [Pepesto app](https://www.pepesto.com/) — that's where the hosted checkout flow lives, including login, basket review, and (for some markets) payment.
 - **The supermarket's own site.** The user can take the matched product list from `pepesto_products` and add the SKUs directly on tesco.com / coop.ch / etc. Slower, but no Pepesto account needed.
+
+## Pricing & best practices
+
+Pepesto runs on simple pay-as-you-go credits — you only pay for what your agents actually use, and **credits never expire**, so a top-up is yours until you spend it. We also offer discounts for students and early-stage teams, so [say hi](https://www.pepesto.com/contact) if that sounds like you. Full per-call pricing and volume tiers live at <https://www.pepesto.com/pricing/>.
+
+A few tips to get the most out of every credit:
+
+- `pepesto_credits` is free — call it any time for a quick balance read-out.
+- `pepesto_oneshot`, `pepesto_parse`, `pepesto_suggest`, and `pepesto_products` are the everyday calls (match a recipe, plan a week, compare baskets) and are priced for routine agent use.
+- `pepesto_catalog` does a full SKU dump for a supermarket and is the heaviest call. It's the right tool for genuine market analysis or price-comparison dashboards — just **cache the result** for at least a day per supermarket. Not sure you need it? [Tell us about your use case](https://www.pepesto.com/contact) and we'll usually point you to a cheaper path.
 
 ## Roadmap
 

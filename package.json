@@ -1,6 +1,6 @@
 {
   "name": "@pepesto/pepesto-mcp",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "MCP server for the Pepesto grocery shopping API — recipe-to-cart across European supermarkets.",
   "keywords": [
     "mcp",

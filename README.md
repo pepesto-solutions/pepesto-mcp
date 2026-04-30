@@ -2,7 +2,7 @@
 
 <!-- mcp-name: io.github.pepesto-solutions/pepesto-mcp -->
 
-MCP server for the [Pepesto API](https://www.pepesto.com/ai-grocery-shopping-agent/) — give your agent the ability to turn any recipe (a URL, plain text, or a photo) into a matched basket of real supermarket products with live prices, across 26 European supermarkets. The MCP covers the **recipe → matched cart** half of the workflow (parse / search / map ingredients to SKUs / check catalogs); when it's time to actually place the order, hand the user off to the [Pepesto app](https://www.pepesto.com/) where they can review and check out.
+MCP server for the [Pepesto API](https://www.pepesto.com/ai-grocery-shopping-agent/) — give your agent the ability to turn any recipe (a URL, plain text, or a photo) into a matched basket of real supermarket products with live prices, across 26 European supermarkets. The MCP covers the **recipe → matched cart** half of the workflow (parse / search / map ingredients to SKUs / check catalogs); placing the actual order is a separate step — see [Where checkout actually happens](#where-checkout-actually-happens).
 
 ## Quick install
 
@@ -49,26 +49,26 @@ claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto/pepesto-
 
 | Tool | Endpoint | Description |
 | --- | --- | --- |
-| `pepesto_oneshot`   | `POST /oneshot`   | One-shot recipe → matched cart with a `redirect_url` to the Pepesto app for checkout. |
+| `pepesto_oneshot`   | `POST /oneshot`   | One-shot recipe → matched cart, including a `redirect_url` for checkout. |
 | `pepesto_parse`     | `POST /parse`     | Parse a URL/text/image recipe into structured ingredients + `KgToken`. |
 | `pepesto_suggest`   | `POST /suggest`   | Search Pepesto's 1M+ recipe graph. |
 | `pepesto_products`  | `POST /products`  | Map `KgToken`s + supermarket to concrete products with prices. |
 | `pepesto_catalog`   | `POST /catalog`   | Full SKU dump for a supermarket. Only when explicitly requested; cache results. |
 | `pepesto_credits`   | `POST /credits`   | Check remaining credits. Free. |
 
-The MCP stops at "matched cart with prices." For actual checkout (review, payment, delivery), users continue in the **[Pepesto app](https://www.pepesto.com/)** — open the `redirect_url` returned by `pepesto_oneshot`, or hand the user the matched-product list from `pepesto_products` and tell them to recreate it there. `/session`, `/checkout`, and `/link` are intentionally not wrapped; see [Roadmap](#roadmap) for what's planned.
+The MCP stops at "matched cart with prices" — see [Where checkout actually happens](#where-checkout-actually-happens) for how users finish the order. `/session`, `/checkout`, and `/link` are intentionally not wrapped; see [Roadmap](#roadmap) for what's planned.
 
 ## Example conversations
 
-### Quick: recipe URL → matched cart, hand off to Pepesto app
+### Quick: recipe URL → matched cart
 
-The fastest path. One tool call, one link to the Pepesto app where the user finishes checkout.
+The fastest path. One tool call returns a matched cart and a checkout link.
 
 > **User:** Use the BBC Good Food pizza margherita recipe to build a Tesco cart, and also add sparkling water and olive oil.
 >
 > **Assistant:** *[Uses `pepesto_oneshot` with `content_urls`, `content_text`, `supermarket_domain: "tesco.com"`]*
 >
-> **Assistant:** Cart matched. Open this link in the Pepesto app to review and check out at Tesco: `<redirect_url>`.
+> **Assistant:** Cart matched at Tesco. Checkout link: `<redirect_url>`.
 
 ### Browse the recipe graph → pick → matched cart
 
@@ -84,11 +84,11 @@ For "find me something to cook" prompts, where the agent searches Pepesto's reci
 >
 > **Assistant:** *[Uses `pepesto_products` with the chosen recipe's `kg_token` and `supermarket_domain: "coop.ch"`]*
 >
-> **Assistant:** I matched 8 ingredients at Coop — cashews CHF 4.20, penne CHF 1.95, ... — total CHF 18.40. To check out, open the [Pepesto app](https://www.pepesto.com/) and search for *Creamy Cashew Penne* (or paste the recipe link).
+> **Assistant:** Matched 8 ingredients at Coop — cashews CHF 4.20, penne CHF 1.95, ... — total CHF 18.40.
 
 ### Parse a specific recipe → matched cart
 
-When the user already has a recipe URL or text in mind. The MCP returns the matched product list; the user finishes in the app.
+When the user already has a recipe URL or text in mind. The MCP returns the matched product list — what to do with it is up to you.
 
 > **User:** Parse this and break out the ingredients: https://www.bbcgoodfood.com/recipes/pizza-margherita-4-easy-steps
 >
@@ -100,7 +100,7 @@ When the user already has a recipe URL or text in mind. The MCP returns the matc
 >
 > **Assistant:** *[Uses `pepesto_products` with the returned `kg_token` and `supermarket_domain: "sainsburys.co.uk"`]*
 >
-> **Assistant:** Matched 8 ingredients at Sainsbury's — total £6.40. Open the [Pepesto app](https://www.pepesto.com/) to check out at Sainsbury's, or use the cart preview yourself on sainsburys.co.uk.
+> **Assistant:** Matched 8 ingredients at Sainsbury's — total £6.40.
 
 ### Weekly meal plan → one merged matched cart
 
@@ -116,7 +116,7 @@ Multiple `kg_token`s through `pepesto_products` in a single call — Pepesto mer
 >
 > **Assistant:** *[Uses `pepesto_products` with all five `kg_tokens` and `supermarket_domain: "delhaize.be"`]*
 >
-> **Assistant:** Combined match: 24 unique ingredients (some shared across recipes), estimated total €68.40 at Delhaize. To turn this into an actual basket, open the [Pepesto app](https://www.pepesto.com/) — the recipes you picked are searchable there.
+> **Assistant:** Combined match: 24 unique ingredients (some shared across recipes), estimated total €68.40 at Delhaize.
 
 ### Compare prices across two supermarkets
 

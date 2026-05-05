@@ -72,6 +72,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:docker": "bash tests/docker.sh",
     "inspector": "npx @modelcontextprotocol/inspector dist/index.js"
   },
   "dependencies": {

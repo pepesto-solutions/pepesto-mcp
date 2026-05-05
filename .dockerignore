@@ -1,0 +1,15 @@
+.git
+.github
+.claude
+.local
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+tests
+.releaserc.json
+CONTRIBUTING.md

@@ -228,3 +228,8 @@ PEPESTO_API_KEY=pep_sk_… npm run inspector
 ## License
 
 The Pepesto MCP server in this repository is licensed under the [MIT License](./LICENSE).
+
+
+## Deploy
+
+- Deploy the [Pepesto MCP on Glama](https://glama.ai/mcp/servers/pepesto-solutions/pepesto-mcp).

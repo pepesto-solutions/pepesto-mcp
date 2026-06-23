@@ -85,7 +85,10 @@ Use `pepesto_predirect` when the cost should fall on the end user; use `pepesto_
 >
 > **Assistant:** *[Uses `pepesto_predirect` with `shopping_list: "2 avocados\n1 loaf of bread\n500 g tomatoes\n..."`]*
 >
-> **Assistant:** Done — open this on your phone to build and check out your basket: `<redirect_url>`.
+> **Assistant:** Done — **[🛒 Open your shopping list in Pepesto →](…)**
+> Free to open · 3 items ready · you only pay at checkout in the app. Open it on your phone (on a computer it'll show a QR code to scan).
+
+The tool returns this as ready-to-show Markdown — one tappable, labeled link plus a short caption — so the long `redirect_url` is never dumped as raw text.
 
 ### Browse the recipe graph → pick → matched cart
 

@@ -1,7 +1,29 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import type { PepestoClient } from "../client.js";
-import { runTool } from "./_runner.js";
+import { PepestoApiError, type PepestoClient } from "../client.js";
+import type { ToolResult } from "./_runner.js";
+
+interface PredirectResponse {
+  redirect_url?: string;
+}
+
+/** Count list entries across newline- or comma-separated input. */
+function countItems(shoppingList: string): number {
+  return shoppingList
+    .split(/[\n,]+/)
+    .map((s) => s.trim())
+    .filter(Boolean).length;
+}
+
+/** Build the ready-to-show Markdown call-to-action for a redirect link. */
+function renderLink(url: string, itemCount: number): string {
+  const items =
+    itemCount > 0 ? `${itemCount} item${itemCount === 1 ? "" : "s"} ready · ` : "";
+  return (
+    `**[🛒 Open your shopping list in Pepesto →](${url})**\n\n` +
+    `Free to open · ${items}you only pay at checkout in the app.`
+  );
+}
 
 export function registerPredirectTool(server: McpServer, client: PepestoClient): void {
   server.registerTool(
@@ -19,7 +41,12 @@ export function registerPredirectTool(server: McpServer, client: PepestoClient):
         "wants to finish shopping on their phone), not a developer-integration endpoint. " +
         "Choose pepesto_predirect when the cost should fall on the end user and a deferred deep " +
         "link is acceptable. Choose pepesto_oneshot instead when the client wants the basket " +
-        "matched up front (with prices) and is willing to pay for the matching.",
+        "matched up front (with prices) and is willing to pay for the matching. " +
+        "PRESENTATION (important): the tool's text output is ready-to-show Markdown — a single " +
+        "tappable, labeled link plus a one-line caption. Surface it to the user exactly as " +
+        "returned; do NOT also paste the long raw URL as plain text. You may add one short " +
+        "sentence telling them to open it on their phone (on a computer, opening it shows a QR " +
+        "code to scan).",
       inputSchema: {
         shopping_list: z
           .string()
@@ -34,6 +61,28 @@ export function registerPredirectTool(server: McpServer, client: PepestoClient):
           .describe("User's locale, e.g. 'de-DE'. Optional."),
       },
     },
-    async (args) => runTool(() => client.post("/predirect", args, { auth: false })),
+    async (args): Promise<ToolResult> => {
+      try {
+        const result = await client.post<PredirectResponse>("/predirect", args, {
+          auth: false,
+        });
+        const url = result?.redirect_url;
+        if (typeof url !== "string" || url.length === 0) {
+          // Unexpected shape — hand back the raw payload so nothing is lost.
+          return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+        }
+        return {
+          content: [{ type: "text", text: renderLink(url, countItems(args.shopping_list)) }],
+        };
+      } catch (err) {
+        const msg =
+          err instanceof PepestoApiError
+            ? err.message
+            : err instanceof Error
+            ? `Error: ${err.message}`
+            : `Error: ${String(err)}`;
+        return { content: [{ type: "text", text: msg }], isError: true };
+      }
+    },
   );
 }

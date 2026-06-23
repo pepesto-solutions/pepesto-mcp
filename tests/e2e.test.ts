@@ -114,7 +114,9 @@ describe("MCP server (in-memory)", () => {
       locale: "de-DE",
     });
     const text = (res.content as { type: string; text: string }[])[0].text;
-    expect(text).toContain("https://s.pepesto.com/xref");
+    // Rendered as a friendly tappable Markdown link, not a naked URL.
+    expect(text).toMatch(/\[🛒[^\]]*Pepesto[^\]]*\]\(https:\/\/s\.pepesto\.com\/xref/);
+    expect(text).toContain("you only pay at checkout");
   });
 
   test("pepesto_predirect works even when no API key is configured", async () => {

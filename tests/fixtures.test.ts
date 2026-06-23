@@ -18,12 +18,12 @@ const load = (name: string): Fixture =>
 
 // Drive a fixture through PepestoClient with a fetch stub that returns the
 // recorded response, and return whatever the client parsed out of it.
-async function callFixture(fx: Fixture): Promise<unknown> {
+async function callFixture(fx: Fixture, opts: { auth?: boolean } = {}): Promise<unknown> {
   const fetchImpl = vi.fn(
     async () => new Response(fx.response.body, { status: fx.response.status }),
   ) as unknown as typeof fetch;
   const client = new PepestoClient({ apiKey: "test-key", fetchImpl });
-  return client.post(fx.request.endpoint, JSON.parse(fx.request.body_raw));
+  return client.post(fx.request.endpoint, JSON.parse(fx.request.body_raw), opts);
 }
 
 // ─── /credits ─────────────────────────────────────────────────────────────
@@ -144,6 +144,36 @@ describe("/oneshot — no content inputs is permissive: 200 with an empty-cart r
   test("the body still has a redirect_url string", async () => {
     const obj = (await callFixture(fx)) as { redirect_url?: unknown };
     expect(typeof obj.redirect_url).toBe("string");
+  });
+});
+
+// ─── /predirect ───────────────────────────────────────────────────────────
+
+/**
+ * Request:  POST /predirect with `{ shopping_list }` and NO Authorization header
+ *           (public, free endpoint — no API key required).
+ * Response: 200 OK with `{ "redirect_url": "https://..." }` (a deferred deep link).
+ * Action:   PepestoClient parses the JSON body without attaching bearer auth.
+ * Reaction: Caller gets a `redirect_url` https string, and no auth header was sent.
+ */
+describe("/predirect — happy path: shopping list → free deferred redirect_url", () => {
+  const fx = load("predirect_ok");
+
+  test("the parsed body has a `redirect_url` https string", async () => {
+    const obj = (await callFixture(fx, { auth: false })) as { redirect_url?: unknown };
+    expect(typeof obj.redirect_url).toBe("string");
+    expect((obj.redirect_url as string).startsWith("https://")).toBe(true);
+  });
+
+  test("the outgoing request carries no Authorization header", async () => {
+    let sentHeaders: Record<string, string> = {};
+    const fetchImpl = vi.fn(async (_url: string, init: RequestInit) => {
+      sentHeaders = (init.headers as Record<string, string>) ?? {};
+      return new Response(fx.response.body, { status: fx.response.status });
+    }) as unknown as typeof fetch;
+    const client = new PepestoClient({ apiKey: "test-key", fetchImpl });
+    await client.post(fx.request.endpoint, JSON.parse(fx.request.body_raw), { auth: false });
+    expect(sentHeaders.Authorization).toBeUndefined();
   });
 });
 

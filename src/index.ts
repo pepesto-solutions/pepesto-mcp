@@ -8,7 +8,8 @@ async function main(): Promise<void> {
     // Start anyway so MCP clients can list tools without credentials configured.
     // Tool *calls* still fail loudly via the client — see src/client.ts.
     process.stderr.write(
-      "pepesto-mcp: PEPESTO_API_KEY is not set — tool calls will fail until it is.\n" +
+      "pepesto-mcp: PEPESTO_API_KEY is not set — authenticated tool calls will fail " +
+        "until it is (the public pepesto_predirect tool still works without a key).\n" +
         "See https://github.com/pepesto-solutions/pepesto-mcp#getting-an-api-key\n",
     );
   }

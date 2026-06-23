@@ -40,6 +40,7 @@ async function makeHarness(opts: { apiKey?: string } = { apiKey: "test-key" }): 
 
 const ALL_TOOLS = [
   "pepesto_oneshot",
+  "pepesto_predirect",
   "pepesto_parse",
   "pepesto_suggest",
   "pepesto_products",
@@ -53,7 +54,7 @@ describe("MCP server (in-memory)", () => {
     h = await makeHarness();
   });
 
-  test("tools/list exposes all 6 Pepesto tools", async () => {
+  test("tools/list exposes all 7 Pepesto tools", async () => {
     const res = await h.client.listTools();
     const names = res.tools.map((t) => t.name).sort();
     expect(names).toEqual([...ALL_TOOLS].sort());
@@ -87,6 +88,58 @@ describe("MCP server (in-memory)", () => {
     });
     const text = (res.content as { type: string; text: string }[])[0].text;
     expect(text).toContain("https://pepesto.com/checkout/abc");
+  });
+
+  test("pepesto_predirect POSTs to /predirect WITHOUT auth and forwards the body", async () => {
+    h.setNextResponse({
+      body: '{"redirect_url":"https://s.pepesto.com/xref?list=abc&pov=parse"}',
+    });
+    const res = await h.client.callTool({
+      name: "pepesto_predirect",
+      arguments: {
+        shopping_list: "2 avocados\n1 loaf of bread\n500 g tomatoes",
+        locale: "de-DE",
+      },
+    });
+
+    expect(res.isError).toBeFalsy();
+    expect(h.fetchCalls).toHaveLength(1);
+    const call = h.fetchCalls[0];
+    expect(call.url).toBe("https://s.pepesto.com/api/predirect");
+    expect(call.init.method).toBe("POST");
+    // Public endpoint: no Authorization header even though a key is configured.
+    expect((call.init.headers as Record<string, string>).Authorization).toBeUndefined();
+    expect(JSON.parse(call.init.body as string)).toEqual({
+      shopping_list: "2 avocados\n1 loaf of bread\n500 g tomatoes",
+      locale: "de-DE",
+    });
+    const text = (res.content as { type: string; text: string }[])[0].text;
+    expect(text).toContain("https://s.pepesto.com/xref");
+  });
+
+  test("pepesto_predirect works even when no API key is configured", async () => {
+    const noKey = await makeHarness({ apiKey: undefined });
+    noKey.setNextResponse({
+      body: '{"redirect_url":"https://s.pepesto.com/xref?list=abc"}',
+    });
+    const res = await noKey.client.callTool({
+      name: "pepesto_predirect",
+      arguments: { shopping_list: "milk" },
+    });
+    expect(res.isError).toBeFalsy();
+    expect(noKey.fetchCalls).toHaveLength(1);
+    expect(
+      (noKey.fetchCalls[0].init.headers as Record<string, string>).Authorization,
+    ).toBeUndefined();
+  });
+
+  test("pepesto_predirect rejects an empty shopping_list via Zod", async () => {
+    const res = await h.client.callTool({
+      name: "pepesto_predirect",
+      arguments: { shopping_list: "" },
+    });
+    expect(res.isError).toBe(true);
+    expect(h.fetchCalls).toHaveLength(0);
   });
 
   test("pepesto_parse POSTs to /parse", async () => {

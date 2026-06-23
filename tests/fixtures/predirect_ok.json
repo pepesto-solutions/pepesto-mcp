@@ -1,0 +1,12 @@
+{
+  "name": "predirect_ok",
+  "request": {
+    "method": "POST",
+    "endpoint": "/predirect",
+    "body_raw": "{\"shopping_list\":\"2 avocados\\n1 loaf of bread\\n500 g tomatoes\"}"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"redirect_url\":\"https://example.com/a1b2c3d4\"}\n"
+  }
+}

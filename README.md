@@ -30,6 +30,8 @@ claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto/pepesto-
 
 ## Getting an API key
 
+> Most tools need a key, but `pepesto_predirect` is **public and free** — it works with no key at all (the end user pays when they check out in the app).
+
 1. Start with a pay-as-you-go credit pack — see <https://www.pepesto.com/pricing/>.
 2. Mint an API key by calling `/link` with the email you used at checkout. The key is returned **only once** — store it immediately.
 
@@ -50,6 +52,7 @@ claude mcp add pepesto -e PEPESTO_API_KEY=pep_sk_… -- npx -y @pepesto/pepesto-
 | Tool | Endpoint | Description |
 | --- | --- | --- |
 | `pepesto_oneshot`   | `POST /oneshot`   | One-shot recipe → matched cart, including a `redirect_url` for checkout. |
+| `pepesto_predirect` | `POST /predirect` | **Free, no API key.** Shopping list → deferred deep link (`redirect_url`); the **end user** pays when they check out in the Pepesto app. |
 | `pepesto_parse`     | `POST /parse`     | Parse a URL/text/image recipe into structured ingredients + `KgToken`. |
 | `pepesto_suggest`   | `POST /suggest`   | Search Pepesto's 1M+ recipe graph. |
 | `pepesto_products`  | `POST /products`  | Map `KgToken`s + supermarket to concrete products with prices. |
@@ -69,6 +72,18 @@ The fastest path. One tool call returns a matched cart and a checkout link.
 > **Assistant:** *[Uses `pepesto_oneshot` with `content_urls`, `content_text`, `supermarket_domain: "tesco.com"`]*
 >
 > **Assistant:** Cart matched at Tesco. Checkout link: `<redirect_url>`.
+
+### Free, deferred handoff → end user pays (`pepesto_predirect`)
+
+When the API client doesn't want to pay for matching and a deferred deep link is acceptable. `pepesto_predirect` is **free** and needs **no API key**: it returns instantly with a link, and parsing + product matching happen lazily once the user opens it. The **user** is charged when they proceed to checkout in the Pepesto app (if the app isn't installed, they're sent to the app store first and the list is preserved).
+
+Use `pepesto_predirect` when the cost should fall on the end user; use `pepesto_oneshot` when the client wants the basket matched up front (with prices) and is willing to pay for it.
+
+> **User:** Here's my weekly shopping list — just give me a link I can open on my phone to finish in the Pepesto app.
+>
+> **Assistant:** *[Uses `pepesto_predirect` with `shopping_list: "2 avocados\n1 loaf of bread\n500 g tomatoes\n..."`]*
+>
+> **Assistant:** Done — open this on your phone to build and check out your basket: `<redirect_url>`.
 
 ### Browse the recipe graph → pick → matched cart
 
@@ -195,6 +210,7 @@ Pepesto runs on simple pay-as-you-go credits — you only pay for what your agen
 A few tips to get the most out of every credit:
 
 - `pepesto_credits` is free — call it any time for a quick balance read-out.
+- `pepesto_predirect` is free and needs no API key — it defers matching and bills the **end user** at checkout, so it costs the API client nothing.
 - `pepesto_oneshot`, `pepesto_parse`, `pepesto_suggest`, and `pepesto_products` are the everyday calls (match a recipe, plan a week, compare baskets) and are priced for routine agent use.
 - `pepesto_catalog` does a full SKU dump for a supermarket and is the heaviest call. It's the right tool for genuine market analysis or price-comparison dashboards — just **cache the result** for at least a day per supermarket. Not sure you need it? [Tell us about your use case](https://www.pepesto.com/contact) and we'll usually point you to a cheaper path.
 

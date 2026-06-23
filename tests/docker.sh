@@ -25,6 +25,7 @@ cd "$(dirname "$0")/.."
 IMAGE=pepesto-mcp:glama-test
 EXPECTED_TOOLS=(
     pepesto_oneshot
+    pepesto_predirect
     pepesto_parse
     pepesto_suggest
     pepesto_products

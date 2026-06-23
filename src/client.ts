@@ -30,8 +30,15 @@ export class PepestoClient {
     this.fetchImpl = opts.fetchImpl ?? fetch;
   }
 
-  async post<T = unknown>(endpoint: string, body: unknown): Promise<T> {
-    if (!this.apiKey) {
+  async post<T = unknown>(
+    endpoint: string,
+    body: unknown,
+    opts: { auth?: boolean } = {},
+  ): Promise<T> {
+    // Public endpoints (e.g. /predirect) take no API key and must not send an
+    // Authorization header. Pass { auth: false } to opt out of bearer auth.
+    const useAuth = opts.auth !== false;
+    if (useAuth && !this.apiKey) {
       throw new Error(
         "PEPESTO_API_KEY is not set. See the README (\"Getting an API key\") for how to " +
           "obtain one.",
@@ -43,8 +50,10 @@ export class PepestoClient {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: `Bearer ${this.apiKey}`,
     };
+    if (useAuth) {
+      headers.Authorization = `Bearer ${this.apiKey}`;
+    }
 
     const res = await this.fetchImpl(url, {
       method: "POST",

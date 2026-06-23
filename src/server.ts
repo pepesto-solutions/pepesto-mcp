@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { PepestoClient, type PepestoClientOptions } from "./client.js";
 import { registerOneshotTool } from "./tools/oneshot.js";
+import { registerPredirectTool } from "./tools/predirect.js";
 import { registerParseTool } from "./tools/parse.js";
 import { registerSuggestTool } from "./tools/suggest.js";
 import { registerProductsTool } from "./tools/products.js";
@@ -21,6 +22,7 @@ export function createServer(opts: CreateServerOptions = {}): McpServer {
   );
 
   registerOneshotTool(server, client);
+  registerPredirectTool(server, client);
   registerParseTool(server, client);
   registerSuggestTool(server, client);
   registerProductsTool(server, client);

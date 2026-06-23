@@ -15,6 +15,8 @@ export function registerPredirectTool(server: McpServer, client: PepestoClient):
         "only after the user opens the link — and the USER (not the API client) is charged when " +
         "they proceed to checkout in the app. If the app isn't installed, the user is sent to the " +
         "app store first and the shopping list is preserved until the app opens. " +
+        "This is an end-user / agent-facing handoff (e.g. a person chatting in Claude Desktop who " +
+        "wants to finish shopping on their phone), not a developer-integration endpoint. " +
         "Choose pepesto_predirect when the cost should fall on the end user and a deferred deep " +
         "link is acceptable. Choose pepesto_oneshot instead when the client wants the basket " +
         "matched up front (with prices) and is willing to pay for the matching.",

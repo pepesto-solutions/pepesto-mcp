@@ -77,6 +77,8 @@ The fastest path. One tool call returns a matched cart and a checkout link.
 
 When the API client doesn't want to pay for matching and a deferred deep link is acceptable. `pepesto_predirect` is **free** and needs **no API key**: it returns instantly with a link, and parsing + product matching happen lazily once the user opens it. The **user** is charged when they proceed to checkout in the Pepesto app (if the app isn't installed, they're sent to the app store first and the list is preserved).
 
+> **Who this is for:** `pepesto_predirect` is an **end-user / agent-facing** tool, not a developer-integration endpoint. It's the right fit when a person is chatting with an assistant (Claude Desktop, ChatGPT, etc.) and wants to hand their shopping list off to their own phone — the agent returns a link, the user finishes (and pays) in the app. If you're a developer building a product *on top of* Pepesto, you'll usually want `pepesto_oneshot` (matched cart up front, you pay) instead. Got a developer use case for `predirect` anyway? [Tell us](https://www.pepesto.com/contact) — we'd love to hear it.
+
 Use `pepesto_predirect` when the cost should fall on the end user; use `pepesto_oneshot` when the client wants the basket matched up front (with prices) and is willing to pay for it.
 
 > **User:** Here's my weekly shopping list — just give me a link I can open on my phone to finish in the Pepesto app.
